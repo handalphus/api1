@@ -9,8 +9,9 @@ import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.api1.R
 import com.example.api1.model.Pollution
+import com.example.api1.model.Value
 
-class PollutionAdapter(var data:LiveData<Pollution>):RecyclerView.Adapter<PollutionAdapter.Holder> (){
+class PollutionValuesAdapter(var data:LiveData<List<Value>>):RecyclerView.Adapter<PollutionValuesAdapter.Holder> (){
     lateinit var context: Context
 
     class Holder(view: View):RecyclerView.ViewHolder(view)
@@ -24,13 +25,13 @@ class PollutionAdapter(var data:LiveData<Pollution>):RecyclerView.Adapter<Pollut
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val textView1=holder.itemView.findViewById<TextView>(R.id.textViewData)
-        textView1.text = data.value?.values?.get(position)?.date?:""
+        textView1.text = data.value?.get(position)?.date?:""
         val textView2=holder.itemView.findViewById<TextView>(R.id.textViewPollutionValue)
-        textView2.text = data.value?.values?.get(position)?.date?:""
+        textView2.text = data.value?.get(position)?.value.toString()?:""
     }
 
     override fun getItemCount(): Int {
-        return data.value?.values?.size?:0
+        return data.value?.size?:0
     }
 
 

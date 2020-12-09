@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.api1.R
-import com.example.api1.viewmodel.PollutionAdapter
+import com.example.api1.viewmodel.PollutionValuesAdapter
 import com.example.api1.viewmodel.PollutionViewModel
 import kotlinx.android.synthetic.main.fragment_pollution.*
 import kotlinx.coroutines.delay
@@ -29,7 +29,7 @@ class pollution : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var pollutionViewModel: PollutionViewModel
-    lateinit var adapter1: PollutionAdapter
+    lateinit var adapter1: PollutionValuesAdapter
     lateinit var viewManager1: RecyclerView.LayoutManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +46,9 @@ class pollution : Fragment() {
         pollutionViewModel = ViewModelProvider(requireActivity()).get(PollutionViewModel::class.java)
         viewManager1 = LinearLayoutManager(requireContext())
 
-        adapter1 = PollutionAdapter(pollutionViewModel.pollutionsLive)
-
-
+        adapter1 = PollutionValuesAdapter(pollutionViewModel.pollutionsLive)
+        pollutionViewModel.pollutionsLive.observe(viewLifecycleOwner,{adapter1.notifyDataSetChanged()})
+        pollutionViewModel.nameOfPolution.observe(viewLifecycleOwner,{textViewPollutionName.text})
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_pollution, container, false)
     }
@@ -59,12 +59,12 @@ class pollution : Fragment() {
             adapter=adapter1
             layoutManager=viewManager1
         }
-        textViewPollutionName.apply {
-            text = pollutionViewModel.pollutionsLive.value?.key?:"Zanieczyszczenia:"
-        }
+
         button.setOnClickListener {
             pollutionViewModel.updatePollutions(92)
         }
+
+
     }
 
     companion object {
